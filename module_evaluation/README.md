@@ -1,8 +1,10 @@
 m5stick module evaluation
 
-- [ ] wifi
+- [ ] serial log
+- [ ] display
 - [ ] button
 - [ ] buzzer
+- [ ] wifi
 - [ ] lcd display
 - [ ] imu (6-axis accelerometer & gyroscope)
 - [ ] rtc (real-time clock)

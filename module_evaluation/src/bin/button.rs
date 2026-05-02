@@ -1,15 +1,10 @@
 #![no_std]
 #![no_main]
-#![deny(
-    clippy::mem_forget,
-    reason = "mem::forget is generally not safe to do with esp_hal types, especially those \
-    holding buffers for the duration of a data transfer."
-)]
 #![deny(clippy::large_stack_frames)]
 
 use esp_backtrace as _;
+use esp_hal::gpio::{Input, InputConfig, Pull};
 use esp_hal::main;
-use esp_hal::timer::timg::TimerGroup;
 use log::info;
 
 extern crate alloc;
@@ -22,31 +17,36 @@ esp_bootloader_esp_idf::esp_app_desc!();
     clippy::large_stack_frames,
     reason = "it's not unusual to allocate larger buffers etc. in main"
 )]
-// #[esp_rtos::main]
 #[main]
 fn main() -> ! {
     // generator version: 1.2.0
 
     // Use default CPU clock to avoid UART baud rate issues
     let config = esp_hal::Config::default();
+    // Start the system
     let peripherals = esp_hal::init(config);
 
     esp_println::logger::init_logger_from_env();
 
     esp_alloc::heap_allocator!(#[esp_hal::ram(reclaimed)] size: 1024);
 
-    let timg0 = TimerGroup::new(peripherals.TIMG0);
-    esp_rtos::start(timg0.timer0);
+    info!("System initialized!");
 
-    esp_println::println!("Second binary initialized!");
-    info!("Second binary initialized!");
-
-    // TODO: Spawn some tasks
-    // let _ = spawner;
+    // Configure GPIO39 as input with pull-up resistor
+    let config = InputConfig::default().with_pull(Pull::Up);
+    let button_a = Input::new(peripherals.GPIO39, config);
+    let button_b = Input::new(peripherals.GPIO37, config);
+    let button_c = Input::new(peripherals.GPIO35, config);
 
     let delay = esp_hal::delay::Delay::new();
     loop {
-        info!("Hello from second binary!");
+        let is_a_pressed = button_a.is_low();
+        let is_b_pressed = button_b.is_low();
+        let is_c_pressed = button_c.is_low();
+        info!("Button A pressed: {}", is_a_pressed);
+        info!("Button B pressed: {}", is_b_pressed);
+        info!("Button C pressed: {}", is_c_pressed);
+
         delay.delay_millis(1000);
     }
 

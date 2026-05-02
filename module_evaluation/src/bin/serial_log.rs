@@ -1,15 +1,9 @@
 #![no_std]
 #![no_main]
-#![deny(
-    clippy::mem_forget,
-    reason = "mem::forget is generally not safe to do with esp_hal types, especially those \
-    holding buffers for the duration of a data transfer."
-)]
 #![deny(clippy::large_stack_frames)]
 
 use esp_backtrace as _;
 use esp_hal::main;
-use esp_hal::timer::timg::TimerGroup;
 use log::info;
 
 extern crate alloc;
@@ -28,20 +22,14 @@ fn main() -> ! {
 
     // Use default CPU clock to avoid UART baud rate issues
     let config = esp_hal::Config::default();
-    let peripherals = esp_hal::init(config);
+    // Start the system
+    let _peripherals = esp_hal::init(config);
 
     esp_println::logger::init_logger_from_env();
 
     esp_alloc::heap_allocator!(#[esp_hal::ram(reclaimed)] size: 1024);
 
-    let timg0 = TimerGroup::new(peripherals.TIMG0);
-    esp_rtos::start(timg0.timer0);
-
-    esp_println::println!("Embassy initialized!");
-    info!("Embassy initialized!");
-
-    // TODO: Spawn some tasks
-    // let _ = spawner;
+    info!("System initialized!");
 
     let delay = esp_hal::delay::Delay::new();
     loop {

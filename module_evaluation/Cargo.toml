@@ -1,12 +1,16 @@
 [package]
 edition      = "2024"
-name         = "esp32-quick"
+name         = "module_evaluation"
 rust-version = "1.88"
 version      = "0.1.0"
 
 [[bin]]
-name = "esp32-quick"
-path = "./src/bin/main.rs"
+name = "serial_log"
+path = "./src/bin/serial_log.rs"
+
+[[bin]]
+name = "button"
+path = "./src/bin/button.rs"
 
 [dependencies]
 esp-hal = { version = "~1.0", features = ["esp32", "log-04", "unstable"] }

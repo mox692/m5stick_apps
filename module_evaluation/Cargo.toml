@@ -16,6 +16,10 @@ path = "./src/bin/button.rs"
 name = "display"
 path = "./src/bin/display.rs"
 
+[[bin]]
+name = "led"
+path = "./src/bin/led.rs"
+
 [dependencies]
 esp-hal = { version = "~1.0", features = ["esp32", "log-04", "unstable"] }
 

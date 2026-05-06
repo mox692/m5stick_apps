@@ -1183,6 +1183,7 @@ dependencies = [
  "esp-radio",
  "esp-rtos",
  "fugit",
+ "heapless 0.9.3",
  "log",
  "mipidsi",
  "smoltcp",

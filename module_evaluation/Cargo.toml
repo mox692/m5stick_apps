@@ -24,6 +24,10 @@ path = "./src/bin/led.rs"
 name = "buzzer"
 path = "./src/bin/buzzer.rs"
 
+[[bin]]
+name = "wifi"
+path = "./src/bin/wifi.rs"
+
 [dependencies]
 esp-hal = { version = "~1.0", features = ["esp32", "log-04", "unstable"] }
 
@@ -88,6 +92,11 @@ embedded-hal = "1.0.0"
 mipidsi = "0.10.0"
 embedded-hal-bus = "0.2"
 fugit = "0.3.9"
+
+# wifi
+# embedded-svc = "0.22.0"
+# esp-idf-svc = "0.52.1"
+heapless = { version = "0.9.1" }
 
 
 [profile.dev]
